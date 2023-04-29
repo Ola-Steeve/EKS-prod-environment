@@ -5,10 +5,10 @@
 
 resource "aws_eks_cluster" "eksdemo" {
   name     = "${var.eks_cluster}"
-  role_arn = aws_iam_role.example.arn
+  role_arn = aws_iam_role.eksiamrole.arn
 
   vpc_config {
-    subnet_ids = "${var.subnet_id}"
+    subnet_ids = [aws_subnet.subnet-1.id, aws_subnet.subnet-2.id]
   }
 
 
@@ -22,9 +22,9 @@ output "endpoint" {
   value = aws_eks_cluster.eksdemo.endpoint
 }
 
-output "kubeconfig-certificate-authority-data" {
-  value = aws_eks_cluster.eksdemo.certificate_authority[0].data
-}
+# output "kubeconfig-certificate-authority-data" {
+#   value = aws_eks_cluster.eksdemo.certificate_authority[0].data
+# }
 
 
 
@@ -92,3 +92,5 @@ data "aws_iam_policy_document" "eksdoc_assume_role_policy" {
     }
   }
 }
+
+

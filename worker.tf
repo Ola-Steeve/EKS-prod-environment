@@ -2,11 +2,11 @@
 # Worker Node
 #------------
 
-resource "aws_eks_node_group" "example" {
-  cluster_name    = ${var.eks_cluster}
+resource "aws_eks_node_group" "eksnode" {
+  cluster_name    = "${var.eks_cluster}"
   node_group_name = "eksnodegroup"
   node_role_arn   = aws_iam_role.eksnoderole.arn
-  subnet_ids      = ${var.subnet_id}
+  subnet_ids      = [aws_subnet.subnet-1.id, aws_subnet.subnet-2.id]
 
   scaling_config {
     desired_size = 2
@@ -19,6 +19,7 @@ resource "aws_eks_node_group" "example" {
   }
 
   depends_on = [
+    aws_eks_cluster.eksdemo,
     aws_iam_role_policy_attachment.eksnode-AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.eksnode-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.eksnode-AmazonEC2ContainerRegistryReadOnly,
